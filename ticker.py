@@ -20,7 +20,7 @@ sc.fill(orange)
 
 # font
 font = pygame.font.SysFont('timesnewroman', 40)
-
+font_2 = pygame.font.SysFont('timesnewroman', 30)
 # titles
 follow = font.render('Welcome to ticker', 1, white)
 sc.blit(follow, (450, 20))
@@ -54,19 +54,31 @@ sc.blit(timer, (100, 70))
 g = 9.8
 angle = math.radians(15)
 r = 500
-e = (-g * math.sin(angle)) / (r*5.5)
+k = 1
+R = r * k
+e = (-g * math.sin(angle)) / (R * 2 * math.pi)
 w = 0
 
 pos_start_x = 600
 pos_start_y = 150
 pos_start = (pos_start_x, pos_start_y)
 
-pos_x = math.sin(angle) * r
-pos_y = math.cos(angle) * r
+pos_x = math.sin(angle) * r * k
+pos_y = math.cos(angle) * r * k
 pos = (pos_x + pos_start_x, pos_y + pos_start_y)
 
 pygame.draw.circle(sc, black, pos_start, 10, 10)
 pygame.draw.line(sc, black, pos_start, pos, 3)
+
+# slider
+x = 3
+osn = pygame.Surface((250, 30))
+osn.fill(black)
+polz = pygame.Surface((15, 30))
+polz.fill(white)
+polz_p = (x, 0)
+osn.blit(polz, polz_p)
+sc.blit(osn, (800, 150))
 
 while True:
     for event in pygame.event.get():
@@ -80,6 +92,11 @@ while True:
                 if count % 2 == 0:
                     start = False
                 start_time = pygame.time.get_ticks()
+            if (805 < mouse[0] < 1055) and (150 < mouse[1] < 180):
+                x = mouse[0] - 804
+                w = 0
+                angle = math.radians(15)
+
     if start:
         # time
         minutes = (time_x - start_time) // 60000
@@ -94,17 +111,19 @@ while True:
             ssec = '0' + ssec
         if milliseconds < 10:
             smil = '0' + smil
+
         sc.fill(orange)
         pygame.draw.rect(sc, red, (130, 120, 140, 40))
         sc.blit(b_stop, b_stop_pos)
 
         # маятник
-        e = -(g * math.sin(angle)) / (r*5.5)
+        R = r * k
+        e = -(g * math.sin(angle)) / (R * 2 * math.pi)
         w += e
         angle += w
 
-        pos_x = math.sin(angle) * r
-        pos_y = math.cos(angle) * r
+        pos_x = math.sin(angle) * R
+        pos_y = math.cos(angle) * R
         pos = (pos_x + pos_start_x, pos_y + pos_start_y)
 
         pygame.draw.circle(sc, black, pos_start, 10, 10)
@@ -116,11 +135,26 @@ while True:
         b_start_pos = b_start.get_rect(center=(200, 140))
         sc.blit(b_start, b_start_pos)
 
+    k=round(x*0.004, 2)
+    pygame.draw.rect(sc, orange, (650, 100, 550, 30))
+    zn_k=font_2.render(str(k) + ' м', black, 1)
+    pos_zn_k = zn_k.get_rect(center=(925, 120))
+    sc.blit(zn_k, pos_zn_k)
+
+
     time_x = pygame.time.get_ticks()
     timer.fill(black)
     time = font.render(smin + ':' + ssec + ':' + smil, 1, white)
     place_t = time.get_rect(center=(100, 20))
     timer.blit(time, place_t)
     sc.blit(timer, (100, 70))
+
+    osn.fill(black)
+    polz.fill(white)
+    polz_p = (x, 0)
+    osn.blit(polz, polz_p)
+    sc.blit(osn, (800, 150))
+
+
     pygame.display.update()
     pygame.time.delay(10)
