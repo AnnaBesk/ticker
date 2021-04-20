@@ -60,7 +60,9 @@ R = r * k  # текущий радиус
 e = (-g * math.sin(angle)) / R  # угловое ускорение
 w = 0  # угловая скорость
 m = 0.1  # масса
-K = 5  # коэффициент трения
+K = 100  # коэффициент трения
+v = w * R # линейная скорость
+dt = 0.01
 
 pos_start_x = 600
 pos_start_y = 150
@@ -123,8 +125,10 @@ while True:
         # маятник
         R = r * k
         e = -(g * math.sin(angle)) / R
-        w += e
-        angle += w
+        w += e * dt
+        angle += w * dt
+        v = w * R
+
 
         pos_x = math.sin(angle) * R
         pos_y = math.cos(angle) * R
@@ -160,4 +164,3 @@ while True:
     sc.blit(osn, (800, 150))
 
     pygame.display.update()
-    pygame.time.delay(10)
