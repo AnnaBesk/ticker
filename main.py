@@ -52,6 +52,7 @@ timer.blit(time, place_t)
 sc.blit(timer, (100, 70))
 
 # ticker
+clock = pygame.time.Clock()
 g = 9.81  # ускорение свободного падения
 angle = math.radians(15)  # угол
 r = 500  # максимальный радиус
@@ -60,8 +61,8 @@ R = r * k  # текущий радиус
 e = (-g * math.sin(angle)) / R  # угловое ускорение
 w = 0  # угловая скорость
 m = 0.1  # масса
-K = 0.0005  # коэффициент трения
-v = w * R # линейная скорость
+K = 0.05 # коэффициент трения
+v = w * k # линейная скорость
 dt = 0.01
 
 pos_start_x = 600
@@ -124,10 +125,10 @@ while True:
 
         # маятник
         R = r * k
-        e = -(g * math.sin(angle) - (K * v) / m) / R
+        e = (-(g * math.sin(angle)) - (K * v) / m) / R
         w += e * dt
         angle += w * dt
-        v = w * R
+        v = w * k
 
         pos_x = math.sin(angle) * R
         pos_y = math.cos(angle) * R
@@ -150,7 +151,7 @@ while True:
     sc.blit(zn_k, pos_zn_k)
 
     time_x = pygame.time.get_ticks()
-    print(time_x)
+    dt = clock.tick(100) * 0.022
     timer.fill(black)
     time = font.render(smin + ':' + ssec + ':' + smil, 1, white)
     place_t = time.get_rect(center=(100, 20))
