@@ -61,8 +61,8 @@ R = r * k  # текущий радиус
 e = (-g * math.sin(angle)) / R  # угловое ускорение
 w = 0  # угловая скорость
 m = 0.1  # масса
-K = 0.05 # коэффициент трения
-v = w * k # линейная скорость
+K = 0.05  # коэффициент трения
+v = w * k  # линейная скорость
 dt = 0.01
 
 pos_start_x = 600
@@ -106,12 +106,13 @@ while True:
 
     if start:
         # time
-        minutes = (time_x - start_time) // 60000
-        seconds = ((time_x - start_time) % 60000) // 1000
-        milliseconds = ((time_x - start_time) % 60000) % 100
+        minutes = (time_x - start_time) // 60000  # расчёт минут
+        seconds = ((time_x - start_time) % 60000) // 1000  # расчёт секунд
+        milliseconds = ((time_x - start_time) % 60000) % 100  # расчёт милисекунд
         smin = str(minutes)
         ssec = str(seconds)
         smil = str(milliseconds)
+        # настройка отображения секунд
         if minutes < 10:
             smin = '0' + smin
         if seconds < 10:
@@ -130,26 +131,31 @@ while True:
         angle += w * dt
         v = w * k
 
+        # положение шарика
         pos_x = math.sin(angle) * R
         pos_y = math.cos(angle) * R
         pos = (pos_x + pos_start_x, pos_y + pos_start_y)
 
+        # отрисовка
         pygame.draw.circle(sc, black, pos_start, 10, 10)
         pygame.draw.line(sc, black, pos_start, pos, 3)
         pygame.draw.circle(sc, red, pos, 10, 10)
 
     if not start:
         pygame.draw.rect(sc, lime, (130, 120, 140, 40))
+        # смена кнопки
         b_start = font.render('START', 1, white)
         b_start_pos = b_start.get_rect(center=(200, 140))
         sc.blit(b_start, b_start_pos)
 
-    k = round(x * 0.004, 2)
+    # ползунок
+    k = round(x * 0.004, 2)  # значение длины
     pygame.draw.rect(sc, orange, (650, 100, 550, 30))
-    zn_k = font_2.render(str(k) + ' м', black, 1)
+    zn_k = font_2.render(str(k) + ' м', black, 1)  # надписи
     pos_zn_k = zn_k.get_rect(center=(925, 120))
     sc.blit(zn_k, pos_zn_k)
 
+    # получение времени и отображение таймера
     time_x = pygame.time.get_ticks()
     dt = clock.tick(100) * 0.022
     timer.fill(black)
@@ -158,6 +164,7 @@ while True:
     timer.blit(time, place_t)
     sc.blit(timer, (100, 70))
 
+    # канва
     osn.fill(black)
     polz.fill(white)
     polz_p = (x, 0)
